@@ -8,6 +8,7 @@
   	<module>eurekaserver</module>
   	<module>payementservice</module>
   	<module>paymentclient</module>
+  	<module>paymentConfigserver</module>
   </modules>
   
   <parent>
