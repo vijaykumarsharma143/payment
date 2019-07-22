@@ -1,12 +1,12 @@
 package com.payment.paymentclient;
 
 
-import javax.xml.ws.Response;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 
 @SpringBootApplication
-@EnableEurekaClient
+@EnableDiscoveryClient
 @RestController
 public class ClientApplication {
 	
@@ -27,18 +27,36 @@ public class ClientApplication {
 	
 	@Autowired
 	private RestTemplateBuilder restTemplateBuilder;
+	
+	@Autowired
+	private ConfigAppClient configAppClient;
 
+	@Value("${some.other.property}")
+	private String someotherproperty;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(ClientApplication.class, args);
 	}
 	
-		@RequestMapping("/hi")
+	@RequestMapping("/hi")
 	public String callmessage() {
 		RestTemplate restTemplate = restTemplateBuilder.build();
-		InstanceInfo  instanceinfo= client.getNextServerFromEureka("service", false);
-		String baseUrl= instanceinfo.getHomePageUrl();
-		ResponseEntity<String> response= restTemplate.exchange(baseUrl,HttpMethod.GET,null,String.class);
+		InstanceInfo instanceinfo = client.getNextServerFromEureka("service", false);
+		String baseUrl = instanceinfo.getHomePageUrl();
+		ResponseEntity<String> response = restTemplate.exchange(baseUrl, HttpMethod.GET, null, String.class);
 		return response.getBody();
-		
+
 	}
+	@RequestMapping("/hello")
+	public String prinntconfig() {
+		StringBuilder s=new StringBuilder();
+		s.append(configAppClient.getProperty());
+		s.append("||");
+		s.append(someotherproperty);
+		return s.toString();
+
+	}
+		
+		
+		
 }
