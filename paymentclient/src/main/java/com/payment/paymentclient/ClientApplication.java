@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 
 @SpringBootApplication
-@EnableDiscoveryClient
+@EnableEurekaClient
 @RestController
 public class ClientApplication {
 	
@@ -31,7 +30,7 @@ public class ClientApplication {
 	@Autowired
 	private ConfigAppClient configAppClient;
 
-	@Value("${some.other.property}")
+	@Value("${some.property:Default hello}")
 	private String someotherproperty;
 	
 	public static void main(String[] args) {
